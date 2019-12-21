@@ -1,11 +1,13 @@
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-public class View {
-    JFrame frame = buildFrame();
+class View {
+    private JFrame frame = buildFrame();
+    GraphicsEnvironment graphics = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    GraphicsDevice device = graphics.getDefaultScreenDevice();
 
-    public void drawFrame(BufferedImage image) {
+    void drawFrame(BufferedImage image) {
         JPanel pane = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -27,5 +29,10 @@ public class View {
         frame.setSize(400, 200);
         frame.setVisible(true);
         return frame;
+    }
+
+    void setFullScreen() {
+        frame.setResizable(false);
+        device.setFullScreenWindow(frame);
     }
 }

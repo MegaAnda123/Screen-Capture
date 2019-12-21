@@ -3,14 +3,16 @@ import java.awt.image.BufferedImage;
 
 public class Capture {
 
-    static int fps=60;
+    private static final int fps=60;
 
     public static void main(String[] args) throws AWTException, InterruptedException {
         BufferedImage capture;
         View view = new View();
+
         while (true) {
             capture = captureScreenFrame();
             view.drawFrame(capture);
+
             Thread.sleep(1000/fps);
         }
     }
