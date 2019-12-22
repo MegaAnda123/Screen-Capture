@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 public class Capture {
 
-    private static final int fps=60;
+    private static final int fps=144;
 
     public static void main(String[] args) throws AWTException, InterruptedException {
         BufferedImage capture;
@@ -19,7 +19,6 @@ public class Capture {
 
     private static BufferedImage captureScreenFrame() throws AWTException {
         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-        BufferedImage capture = new Robot().createScreenCapture(screenRect);
-        return capture;
+        return new Robot().createScreenCapture(screenRect);
     }
 }
