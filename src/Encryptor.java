@@ -1,10 +1,11 @@
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.util.Arrays;
 import java.util.Base64;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Encryptor {
 
@@ -78,4 +79,32 @@ public class Encryptor {
             e.printStackTrace();
         }
     }
+
+
+    public static KeyPair generateKeyPair() throws Exception {
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        generator.initialize(1024, new SecureRandom());
+        KeyPair pair = generator.generateKeyPair();
+
+        return pair;
+    }
+
+    public static String encryptWithPublicKey(String plainText, PublicKey publicKey) throws Exception {
+        Cipher encryptCipher = Cipher.getInstance("RSA");
+        encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+        byte[] cipherText = encryptCipher.doFinal(plainText.getBytes(UTF_8));
+
+        return Base64.getEncoder().encodeToString(cipherText);
+    }
+
+    public static String decryptWithPrivateKey(String cipherText, PrivateKey privateKey) throws Exception {
+        byte[] bytes = Base64.getDecoder().decode(cipherText);
+
+        Cipher decriptCipher = Cipher.getInstance("RSA");
+        decriptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+        return new String(decriptCipher.doFinal(bytes), UTF_8);
+    }
+
 }
