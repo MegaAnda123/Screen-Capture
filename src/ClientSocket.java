@@ -1,24 +1,23 @@
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
-public class ClientSocket {
+class ClientSocket {
 
     private Socket socket;
-    private DataOutputStream outStream;
     private InputStream inStream;
     private PrintWriter pr;
-    private InputStreamReader in;
     private BufferedReader bf;
 
 
     /**
      * Constructor try to connect to the given ip and port. Throws exception if connecting fails.
      * @param ip Ip to connect to with optional port at end separated with ":" (default port 42069 will be used if no port number is given).
-     * @throws IOException
+     * @throws IOException if an I/O error occurs when waiting for a connection.
      */
-    public ClientSocket(String ip) throws IOException {
+    ClientSocket(String ip) throws IOException {
         if(ip.isEmpty()) {
             throw new IllegalArgumentException();
         }
@@ -35,35 +34,37 @@ public class ClientSocket {
         try {
             socket = new Socket(IP, Integer.parseInt(PORT));
 
-            outStream = new DataOutputStream(socket.getOutputStream());
+            DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
             inStream = socket.getInputStream();
             pr = new PrintWriter(outStream);
-            in = new InputStreamReader(socket.getInputStream());
+            InputStreamReader in = new InputStreamReader(socket.getInputStream());
             bf = new BufferedReader(in);
             System.out.println("Connected successfully to " + IP);
-        } catch (ConnectException e) {
-            System.out.println("Failed to connect");
-            throw new IllegalArgumentException();
-        } catch (UnknownHostException ignore) {
-            throw new IllegalArgumentException();
+        } catch (ConnectException | UnknownHostException e) {
+            throw new SocketException("Failed to connect");
         }
     }
 
-    public String readSocket() throws IOException {
-        String string = "";
+    /**
+     * Reads new data from socket.
+     * @return Returns the new data as a string.
+     * @throws IOException if an I/O error occurs when waiting for a connection.
+     */
+    String readSocket() throws IOException {
+        StringBuilder string = new StringBuilder();
         while (inStream.available() != 0) {
-            string += bf.readLine();
+            string.append(bf.readLine());
         }
-        return string;
+        return string.toString();
     }
 
-    public void writeSocket(String string) {
+    /**
+     * Writes data to socket.
+     * @param string What the method will write to the socket.
+     */
+    void writeSocket(String string) {
         pr.println(string);
         pr.flush();
-    }
-
-    public boolean IsConnected() {
-        return socket.isConnected();
     }
 
     void closeSocket() throws IOException {
