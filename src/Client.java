@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Scanner;
 
 public class Client {
     private boolean readInData = true;
@@ -10,22 +9,15 @@ public class Client {
         new Client();
     }
 
-    private Client() throws IOException {
+    Client() throws IOException {
         try {
             socket = new ClientSocket("192.168.1.118");
         } catch (SocketException e) {
             e.printStackTrace();
         }
 
-
         Thread socketInThread = new Thread(new ReadSocketInThread());
         socketInThread.start();
-
-        Scanner reader = new Scanner(System.in);
-        while (true) {
-            socket.writeSocket(reader.nextLine());
-            System.out.println(socket.readSocket());
-        }
     }
 
     private void processInData(String string) {
@@ -48,7 +40,7 @@ public class Client {
         }
     }
 
-    private void outData(String string) {
+    void outData(String string) {
         socket.writeSocket(string);
     }
 

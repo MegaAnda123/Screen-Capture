@@ -27,24 +27,54 @@ class Server {
     }
 
     private void runCommand(String string) {
-        //TODO
-        System.out.println("No supported commands");
+        String[] temp = splitText(string);
+        String command = temp[0];
+        String options = temp[1];
+
+        switch (command) {
+            case "clear":
+            case "cls":
+                for (int i = 0; i < 50; ++i) System.out.println();
+                break;
+            case "stop":
+                //TODO
+                break;
+            case "readIn":
+                if(options.equalsIgnoreCase("true")) {
+                    readInData=true;
+                    break;
+                }
+                if(options.equalsIgnoreCase("false")) {
+                    readInData=false;
+                    break;
+                }
+                System.out.println("No accepted condition given. Supported: true,false");
+                break;
+            case "acceptNew":
+                if(options.equalsIgnoreCase("true")) {
+                    acceptNewClients=true;
+                    break;
+                }
+                if(options.equalsIgnoreCase("false")) {
+                    acceptNewClients=false;
+                    break;
+                }
+                System.out.println("No accepted condition given. Supported: true,false");
+                break;
+            default:
+                System.out.println("Command " + "\"" + string + "\"" + " not supported");
+                break;
+        }
     }
 
     private void processInData(ServerClient client, String string) {
-        String[] temp = string.split(" ");
+        String[] temp = splitText(string);
         String command = temp[0];
-        String message;
-        try {
-            message = string.substring((temp[0].length() + 1));
-        } catch (StringIndexOutOfBoundsException e) {
-            message = "";
-        }
-
+        String message = temp[1];
 
         switch(command) {
             case "return":
-                outData(client,"return "+message);
+                outData(client,"return "+ message);
                 break;
             case "error":
                 System.out.println("Client sent a error message?");
@@ -61,6 +91,18 @@ class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String[] splitText(String string) {
+        String[] temp = string.split(" ");
+        String start = temp[0];
+        String rest;
+        try {
+            rest = string.substring((temp[0].length() + 1));
+        } catch (StringIndexOutOfBoundsException e) {
+            rest = "";
+        }
+        return new String[] {start, rest};
     }
 
     private void addNewClient(Socket socket) {
