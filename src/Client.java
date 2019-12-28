@@ -2,12 +2,14 @@ import java.io.IOException;
 import java.net.SocketException;
 
 public class Client {
-    private boolean readInData = true;
-    private ClientSocket socket;
 
     public static void main(String[] args) throws IOException {
         new Client();
+        new Client();
     }
+
+    private boolean readInData = true;
+    private ClientSocket socket;
 
     Client() throws IOException {
         try {

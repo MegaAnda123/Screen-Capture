@@ -5,14 +5,21 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Scanner;
 
+
+
 class Server {
+
+    public static void main(String[] args) throws IOException {
+        new Server();
+    }
+
     private boolean readInData = true;
     private boolean acceptNewClients = true;
     private boolean quit = false;
     private ServerSockets sockets;
     private ArrayList<ServerClient> clients = new ArrayList<>();
 
-    void start() throws IOException {
+    Server() throws IOException {
         sockets = new ServerSockets(42069);
         Thread acceptClients = new Thread(new AcceptClientsThread());
         Thread readSockets = new Thread(new ReadSocketInThread());
