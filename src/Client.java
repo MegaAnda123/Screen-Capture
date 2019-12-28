@@ -1,17 +1,24 @@
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Scanner;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException {
-        new Client();
+    public static void main(String[] args) throws IOException, AWTException, InterruptedException {
         new Client();
     }
+
+    View view = new View();
+    Capture capture = new Capture();
 
     private boolean readInData = true;
     private ClientSocket socket;
 
-    Client() throws IOException {
+    Client() throws IOException, AWTException, InterruptedException {
         try {
             socket = new ClientSocket("192.168.1.118");
         } catch (SocketException e) {
@@ -20,6 +27,31 @@ public class Client {
 
         Thread socketInThread = new Thread(new ReadSocketInThread());
         socketInThread.start();
+
+        /**
+        Scanner reader = new Scanner(System.in);
+        while (true) {
+            socket.writeSocket(reader.nextLine());
+        }
+         */
+
+        while(true) {
+            File image = capture.makeJPG(capture.captureScreenFrame());
+            String string = Serializer.ObjectToString(new Serializer.Data(image));
+            outData("image " + string);
+            System.out.println("Data should be sent");
+            Thread.sleep(1000/10);
+        }
+    }
+
+
+    void displayImage(String string) {
+        try {
+            Serializer.Data image = (Serializer.Data) Serializer.ObjectFromString(string);
+            view.drawFrame(ImageIO.read(image.getFile()));
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void processInData(String string) {
@@ -37,13 +69,19 @@ public class Client {
                 System.out.println(message);
                 break;
             case "error":
-                System.out.println(message);
+                System.out.println("Error: " + message);
                 break;
+            case "image":
+                System.out.println("YES");
+                displayImage(message);
+                break;
+            default:
+                System.out.println("Unknown error");
         }
     }
 
     void outData(String string) {
-        socket.writeSocket(string);
+        socket.writeSocket(string+"\n");
     }
 
 

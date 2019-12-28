@@ -81,10 +81,13 @@ class Server {
 
         switch(command) {
             case "return":
-                outData(client,"return "+ message);
+                outData(client,"return " + message);
                 break;
             case "error":
                 System.out.println("Client sent a error message?");
+                break;
+            case "image":
+                outData(client,"image " + message);
                 break;
             default:
                 outData(client,"error Command error");

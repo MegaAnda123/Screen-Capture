@@ -52,10 +52,15 @@ class ClientSocket {
      */
     String readSocket() throws IOException {
         StringBuilder string = new StringBuilder();
-        while (inStream.available() != 0) {
-            string.append(bf.readLine());
+        if(inStream.available() != 0) {
+            while (inStream.available() != 0) {
+                string.append(bf.readLine());
+            }
+        } else {
+            throw new SocketException("No new data in socket");
         }
-        return string.toString();
+            return string.toString();
+
     }
 
     /**
