@@ -15,12 +15,9 @@ class View {
                 g.drawImage(image, 0, 0,frame.getWidth(),frame.getHeight(),null);
             }
         };
-
-
         frame.getContentPane().removeAll();
         frame.add(pane);
         frame.setVisible(true);
-
     }
 
     private static JFrame buildFrame() {

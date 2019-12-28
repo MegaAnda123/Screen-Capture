@@ -1,13 +1,12 @@
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.security.PublicKey;
 import java.util.Base64;
-import java.util.List;
+
 
 public class Serializer {
 
-    public static String objectToText(PublicKey myObject) {
+    public static String publicKeyToText(PublicKey myObject) {
 
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -42,5 +41,6 @@ public class Serializer {
         }
 
         return null;
+
     }
 }
