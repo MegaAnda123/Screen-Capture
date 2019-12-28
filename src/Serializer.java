@@ -1,46 +1,47 @@
-
 import java.io.*;
-import java.security.PublicKey;
 import java.util.Base64;
 
+class Serializer {
 
-public class Serializer {
 
-    public static String publicKeyToText(PublicKey myObject) {
-
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(myObject);
-            oos.flush();
-            byte[] binary = baos.toByteArray();
-            String text = Base64.getEncoder().encodeToString(binary); // Base64 is in the apache commons codec library
-            return text;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    /**
+     * Converts a serializable object to a string.
+     * @param object Object that will be converted to a string.
+     * @return Returns the object serialized as a string.
+     * @throws IOException if an I/O error occurs when waiting for a connection.
+     */
+    static String ObjectToString(Serializable object) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(object);
+        objectOutputStream.close();
+        return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
     }
 
     /**
-     * Public key adapted deserializer
-     * @param objectText
-     * @return
+     * Converts a serialized object string back to a object.
+     * @param string The string the method will convert.
+     * @return Returns the object.
+     * @throws IOException if an I/O error occurs when waiting for a connection.
+     * @throws ClassNotFoundException //TODO comment this
      */
-    public static PublicKey textToPublicKey(String objectText){
+    static Object ObjectFromString(String string) throws IOException, ClassNotFoundException {
+        byte[] data = Base64.getDecoder().decode(string);
+        ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(data));
+        Object object = objectInputStream.readObject();
+        objectInputStream.close();
+        return object;
+    }
 
-        try {
-            byte[] b = Base64.getDecoder().decode(objectText);
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            PublicKey puKey = (PublicKey) si.readObject();
-            return puKey;
-        } catch (Exception e) {
-            System.out.println(e);
+    static class Data implements Serializable {
+        private File file;
+
+        Data(File file) {
+            this.file = file;
         }
 
-        return null;
-
+        public File getFile() {
+            return file;
+        }
     }
 }
