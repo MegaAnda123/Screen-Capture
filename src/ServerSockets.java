@@ -22,6 +22,11 @@ class ServerSockets {
         return serverSocket.accept();
     }
 
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
     /**
      * Reads all the new data from the given socket.
      * @param socket Socket the method will read data from.
@@ -32,6 +37,7 @@ class ServerSockets {
         InputStreamReader in = new InputStreamReader(socket.getInputStream());
         BufferedReader bf = new BufferedReader(in);
         StringBuilder string = new StringBuilder();
+
         if(socket.getInputStream().available() != 0) {
             while (socket.getInputStream().available() != 0) {
                 string.append(bf.readLine());

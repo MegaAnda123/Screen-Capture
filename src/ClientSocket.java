@@ -60,7 +60,6 @@ class ClientSocket {
             throw new SocketException("No new data in socket");
         }
             return string.toString();
-
     }
 
     /**

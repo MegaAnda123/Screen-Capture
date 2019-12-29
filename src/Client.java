@@ -1,10 +1,8 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Scanner;
 
 public class Client {
 
@@ -28,19 +26,12 @@ public class Client {
         Thread socketInThread = new Thread(new ReadSocketInThread());
         socketInThread.start();
 
-        /**
-        Scanner reader = new Scanner(System.in);
-        while (true) {
-            socket.writeSocket(reader.nextLine());
-        }
-         */
-
         while(true) {
             File image = capture.makeJPG(capture.captureScreenFrame());
             String string = Serializer.ObjectToString(new Serializer.Data(image));
             outData("image " + string);
             System.out.println("Data should be sent");
-            Thread.sleep(1000/10);
+            Thread.sleep(1000/144);
         }
     }
 

@@ -142,10 +142,12 @@ class Server {
             while (readInData) {
                 try {
                     for (ServerClient client : clients) {
-                        processInData(client, sockets.readSocket(client.getSocket()));
-                        }
-                    Thread.sleep(1);
-                    } catch (IOException | ConcurrentModificationException | InterruptedException ignored) {}
+                        try {
+                            processInData(client, sockets.readSocket(client.getSocket()));
+                        } catch (SocketException ignored) {}
+                    }
+                    Thread.sleep(10);
+                } catch (IOException | ConcurrentModificationException | InterruptedException ignored) {}
             }
         }
     }
