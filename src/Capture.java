@@ -4,39 +4,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
+/**
+ * Class for handling screen capture and image conversion.
+ *
+ * @author Andre
+ * @version 0.1
+ */
 public class Capture {
 
-    private static final int fps=144;
-
-    public static void main(String[] args) throws AWTException, InterruptedException, IOException, ClassNotFoundException {
-        BufferedImage capture;
-        View view = new View();
-        //Client client = new Client();
-
-        while (true) {
-            capture = captureScreenFrame();
-
-            String serializedObject = Serializer.ObjectToString(new Serializer.Data(makeJPG(capture)));
-            Serializer.Data image = (Serializer.Data) Serializer.ObjectFromString(serializedObject);
-
-
-            view.drawFrame(ImageIO.read(image.getFile()));
-
-            //client.outData("");
-
-
-
-            Thread.sleep(1000/fps);
-
-        }
-    }
-
-
     /**
-     *
-     * @param image
-     * @return
-     * @throws IOException
+     * Method for converting and compressing a buffered image to a JPG file.
+     * @param image The buffered image the method will convert.
+     * @return Returns a compressed JPG file of the buffered image.
+     * @throws IOException TODO
      */
     //TODO make method write to memory, not a temp file on disk. (If possible).
     static File makeJPG(BufferedImage image) throws IOException {
@@ -45,6 +25,7 @@ public class Capture {
         return out;
     }
 
+    //TODO Pending deletion
     JPanel makeImage(BufferedImage image) {
         JPanel pane = new JPanel() {
             @Override
@@ -56,6 +37,11 @@ public class Capture {
         return pane;
     }
 
+    /**
+     * Method for capturing a frame of the primary screen on the system.
+     * @return Returns the frame of the screen as buffered image.
+     * @throws AWTException TODO
+     */
     static BufferedImage captureScreenFrame() throws AWTException {
         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         return new Robot().createScreenCapture(screenRect);

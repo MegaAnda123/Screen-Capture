@@ -4,18 +4,29 @@ import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
 
+/**
+ * Class for the client backend of the program.
+ *
+ * @author Andre
+ * @version 0.1
+ */
 public class Client {
-
     public static void main(String[] args) throws IOException, AWTException, InterruptedException {
         new Client();
     }
 
-    View view = new View();
-    Capture capture = new Capture();
-
+    private View view;
+    private Capture capture = new Capture();
     private boolean readInData = true;
     private ClientSocket socket;
 
+    /**
+     * Client initializer. Connects the client to the server and
+     * starts the threads for listening to the server.
+     * @throws IOException TODO
+     * @throws AWTException TODO
+     * @throws InterruptedException TODO
+     */
     Client() throws IOException, AWTException, InterruptedException {
         try {
             socket = new ClientSocket("192.168.1.118");
@@ -27,16 +38,18 @@ public class Client {
         socketInThread.start();
 
         while(true) {
-            File image = capture.makeJPG(capture.captureScreenFrame());
+            File image = Capture.makeJPG(Capture.captureScreenFrame());
             String string = Serializer.ObjectToString(new Serializer.Data(image));
             outData("image " + string);
-            System.out.println("Data should be sent");
             Thread.sleep(1000/144);
         }
     }
 
-
-    void displayImage(String string) {
+    /**
+     * Method for displaying a serialized image.
+     * @param string The serialized image.
+     */
+    private void displayImage(String string) {
         try {
             Serializer.Data image = (Serializer.Data) Serializer.ObjectFromString(string);
             view.drawFrame(ImageIO.read(image.getFile()));
@@ -45,6 +58,10 @@ public class Client {
         }
     }
 
+    /**
+     * Method for processing data form the server and executing the given command.
+     * @param string The string given by the server.
+     */
     private void processInData(String string) {
         String[] temp = string.split(" ");
         String command = temp[0];
@@ -63,7 +80,6 @@ public class Client {
                 System.out.println("Error: " + message);
                 break;
             case "image":
-                System.out.println("YES");
                 displayImage(message);
                 break;
             default:
@@ -71,10 +87,13 @@ public class Client {
         }
     }
 
-    void outData(String string) {
+    /**
+     * Method for writing data to the server.
+     * @param string The string that will be sent to the server.
+     */
+    private void outData(String string) {
         socket.writeSocket(string+"\n");
     }
-
 
     class ReadSocketInThread implements Runnable {
 

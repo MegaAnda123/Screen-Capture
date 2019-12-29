@@ -4,13 +4,18 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+/**
+ * Class for a simpler more usable socket handling exceptions and containing print writer
+ * and buffer reader etc in this class instead of in the Client class.
+ *
+ * @author Andre
+ * @version 0.1
+ */
 class ClientSocket {
-
     private Socket socket;
     private InputStream inStream;
     private PrintWriter pr;
     private BufferedReader bf;
-
 
     /**
      * Constructor try to connect to the given ip and port. Throws exception if connecting fails.
@@ -71,6 +76,10 @@ class ClientSocket {
         pr.flush();
     }
 
+    /**
+     * Method for elegantly close the socket.
+     * @throws IOException TODO
+     */
     void closeSocket() throws IOException {
         socket.close();
     }
