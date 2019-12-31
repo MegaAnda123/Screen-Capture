@@ -68,6 +68,9 @@ class Server {
                 }
                 System.out.println("No accepted condition given. Supported: true,false");
                 break;
+            case "startSymSharer":
+
+                break;
             default:
                 System.out.println("Command " + "\"" + string + "\"" + " not supported");
                 break;
