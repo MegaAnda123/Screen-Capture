@@ -74,6 +74,9 @@ class Server {
             case "help":
                 //TODO show supported commands
                 break;
+            case "startSymSharer":
+
+                break;
             default:
                 System.out.println("Command " + "\"" + string + "\"" + " not supported");
                 break;

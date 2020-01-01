@@ -1,4 +1,6 @@
 import java.net.Socket;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * Class for holding data from a single connected client or a signed up user.
@@ -11,6 +13,10 @@ public class ServerClient {
     private String password;
     private Socket socket;
     private boolean available = true;
+    private String SymKey;
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
+
 
     public ServerClient() {
     }

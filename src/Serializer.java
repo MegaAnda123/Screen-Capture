@@ -1,4 +1,5 @@
 import java.io.*;
+import java.security.PublicKey;
 import java.util.Base64;
 
 class Serializer {
@@ -42,5 +43,20 @@ class Serializer {
         public File getFile() {
             return file;
         }
+    }
+
+    /**
+     * String into publicKey
+     * @param keyS Serialized PublicKey
+     * @return PublicKey Object
+     */
+    public static PublicKey stringToPublicKey(String keyS){
+        try {
+            PublicKey key = (PublicKey) ObjectFromString(keyS);
+            return key;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

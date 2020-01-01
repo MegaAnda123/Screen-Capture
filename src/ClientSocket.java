@@ -1,3 +1,4 @@
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -16,6 +17,7 @@ class ClientSocket {
     private InputStream inStream;
     private PrintWriter pr;
     private BufferedReader bf;
+    private SecretKey key;
 
     /**
      * Constructor try to connect to the given ip and port. Throws exception if connecting fails.
