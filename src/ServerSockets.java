@@ -6,9 +6,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * Class for a simpler more usable socket handling exceptions and containing print writer
+ * and buffer reader etc in this class instead of in the server class.
+ *
+ * @author Andre
+ * @version 0.1
+ */
 class ServerSockets {
     private ServerSocket serverSocket;
 
+    /**
+     * Initializer for class. Opens a server socket on the given port.
+     * @param port Port the class will host on.
+     * @throws IOException //TODO
+     */
     ServerSockets(int port) throws IOException {
         serverSocket = new ServerSocket(port);
     }
@@ -32,6 +44,7 @@ class ServerSockets {
         InputStreamReader in = new InputStreamReader(socket.getInputStream());
         BufferedReader bf = new BufferedReader(in);
         StringBuilder string = new StringBuilder();
+
         if(socket.getInputStream().available() != 0) {
             while (socket.getInputStream().available() != 0) {
                 string.append(bf.readLine());

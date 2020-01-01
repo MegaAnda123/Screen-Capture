@@ -4,7 +4,6 @@ import java.util.Base64;
 
 class Serializer {
 
-
     /**
      * Converts a serializable object to a string.
      * @param object Object that will be converted to a string.
