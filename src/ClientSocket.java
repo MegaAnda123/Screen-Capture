@@ -1,3 +1,4 @@
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -10,6 +11,7 @@ class ClientSocket {
     private InputStream inStream;
     private PrintWriter pr;
     private BufferedReader bf;
+    private SecretKey key;
 
 
     /**

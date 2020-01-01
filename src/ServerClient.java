@@ -1,10 +1,16 @@
 import java.net.Socket;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 public class ServerClient {
     private String name;
     private String password;
     private Socket socket;
     private boolean available = true;
+    private String SymKey;
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
+
 
     public ServerClient() {
     }
