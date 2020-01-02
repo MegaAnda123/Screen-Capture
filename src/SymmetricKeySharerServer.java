@@ -27,7 +27,7 @@ public class SymmetricKeySharerServer {
 
             //Send public key
             pw.println(publicKeyString);
-
+            pw.flush();
             //Receive Symmetric key
             String encryptedSerializedSymmetricKey = br.readLine();
 
@@ -38,11 +38,17 @@ public class SymmetricKeySharerServer {
             SecretKey secretKey = (SecretKey) Serializer.ObjectFromString(serializedSymmetricKey);
 
             //Send confirm
-            pw.println("200");
+            Encryptor.setSecretKey(secretKey);
+            String confirm = Encryptor.encryptSymmetricWithSecretKey("200");
+            pw.println(confirm);
+            pw.flush();
 
-            //return key
-            return secretKey;
-
+            //Get confirm
+            String result = br.readLine();
+            if (result.equals("200")){
+                //return key
+                return secretKey;
+            }
 
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
