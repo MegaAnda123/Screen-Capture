@@ -35,13 +35,19 @@ public class SymmetricKeySharerClient {
 
             //Send Encrypted Key to server
             pw.println(encryptedSerializeKey);
+            pw.flush();
 
-            //receive confirm
-            String conformation = br.readLine();
-            System.out.println("Conformation: "+ conformation);
+            //receive confirm and check if decrypted correctly
+            String encryptedConformation = br.readLine();
+            Encryptor.setSecretKey(symmetricKey);
+            String confirmation = Encryptor.decryptSymmetricWithSecretKey(encryptedConformation);
 
             //Check confirm and return key
-            if(conformation.equals("200")){
+            if(confirmation.equals("200")){
+                //Send to server that it was correct
+                pw.println("200");
+                pw.flush();
+
                 //return key
                 return symmetricKey;
             }

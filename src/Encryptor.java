@@ -17,7 +17,6 @@ public class Encryptor {
 
     //Key Vars
     private static SecretKeySpec secretKeySpec;
-    private static byte[] key;
     private static SecretKey secretKey = null;
 
 
@@ -34,7 +33,7 @@ public class Encryptor {
             setKey(password);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(input.getBytes("UTF-8")));
+            return Base64.getEncoder().encodeToString(cipher.doFinal(input.getBytes(UTF_8)));
         }
         catch (Exception e)
         {
@@ -71,31 +70,30 @@ public class Encryptor {
       * @param keyIn Wanted Secret
      */
     private static void setKey(String keyIn){
-        MessageDigest sha = null;
+        MessageDigest sha;
 
         try {
-            key = keyIn.getBytes("UTF-8");
+            byte[] key = keyIn.getBytes(UTF_8);
             sha = MessageDigest.getInstance("SHA-1");
             key = sha.digest(key);
             key = Arrays.copyOf(key, 16);
             secretKeySpec = new SecretKeySpec(key, "AES");
         }
-        catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Generate a key pair for Public/private key encryption
-     * @return KeyPair
-     * @throws Exception
+     * @return KeyPair for public/private key encryption
+     * @throws Exception Unexpected exceptions
      */
     public static KeyPair generateKeyPair() throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-        generator.initialize(1024, new SecureRandom());
-        KeyPair pair = generator.generateKeyPair();
+        generator.initialize(2048, new SecureRandom());
 
-        return pair;
+        return generator.generateKeyPair();
     }
 
     /**
@@ -103,7 +101,7 @@ public class Encryptor {
      * @param plainText String message that you want encrypted
      * @param publicKey Public key from KeyPair
      * @return encrypted String
-     * @throws Exception
+     * @throws Exception Unexpected errors
      */
     public static String publicKeyEncryptor(String plainText, PublicKey publicKey) throws Exception {
         //get cipher
@@ -119,7 +117,7 @@ public class Encryptor {
      * @param cipherText Encrypted text from public key encryption
      * @param privateKey Private key from key pair
      * @return  Decrypted string
-     * @throws Exception
+     * @throws Exception Unexpected errors
      */
     public static String privateKeyEncryptor(String cipherText, PrivateKey privateKey) throws Exception {
 
@@ -157,7 +155,7 @@ public class Encryptor {
     /**
      * Encrypt with AES Symmetric key
      * @param input Text for encryption
-     * @return
+     * @return Encrypted string, returns Null if the secret key was not set or generated
      */
     public static String encryptSymmetricWithSecretKey(String input){
         if (secretKey == null) {
@@ -169,7 +167,7 @@ public class Encryptor {
             //initialize as Encrypt mode and set secretKey
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             //Encrypt and return as string
-            return Base64.getEncoder().encodeToString(cipher.doFinal(input.getBytes("UTF-8")));
+            return Base64.getEncoder().encodeToString(cipher.doFinal(input.getBytes(UTF_8)));
         }
         catch (Exception e) {
             System.out.println("Error while encrypting: " + e.toString());
@@ -180,7 +178,7 @@ public class Encryptor {
     /**
      * Decrypt AES with Symmetric SecretKey
      * @param cipherText text for decryption
-     * @return
+     * @return Decrypted String
      */
     public static String decryptSymmetricWithSecretKey(String cipherText){
         try {
